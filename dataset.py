@@ -1,11 +1,6 @@
-from typing import Optional
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 from torch.utils.data import DataLoader
-import numpy as np
-import matplotlib.pyplot as plt
-import torchvision.utils as vutils
-import os
 from device import get_device_info
 
 
@@ -21,15 +16,17 @@ class Dataset:
         self.image_size = 256
         self.batch_size = batch_size
         self.workers = workers
-        self.device = get_device_info().device
         self._set_dataset()
         self.artifacts_folder = artifacts_folder
 
     def _set_dataset(self):
+        backend = get_device_info().backend
+        pin_mem = True if backend == "cuda" else False
         transform = transforms.Compose(
             [
                 transforms.Resize(self.image_size),
                 transforms.CenterCrop(self.image_size),
+                transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
             ]
@@ -40,5 +37,8 @@ class Dataset:
             batch_size=self.batch_size,
             shuffle=True,
             num_workers=self.workers,
+            drop_last=True,
+            pin_memory=pin_mem,
+            persistent_workers=True if self.workers > 0 else False,
         )
         return self.dataset, self.dataloader

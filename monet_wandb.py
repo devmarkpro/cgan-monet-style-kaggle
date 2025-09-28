@@ -1,4 +1,5 @@
 import wandb
+from dataclasses import asdict
 
 from configs import AppParams
 
@@ -14,9 +15,5 @@ class MonetWandb:
             # Set the wandb project where this run will be logged.
             project=self.project_name,
             # Track hyperparameters and run metadata.
-            config={
-                "epochs": self.params.epochs,
-                "batch_size": self.params.batch_size,
-                "learning_rate": self.params.learning_rate,
-            },
+            config=asdict(self.params),
         )

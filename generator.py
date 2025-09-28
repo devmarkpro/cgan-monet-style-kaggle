@@ -26,25 +26,41 @@ class Generator(nn.Module):
         ngf = self.generator_feature_map_size
 
 
+        # For 256x256 output: 1->4->8->16->32->64->128->256
         self._forward = nn.Sequential(
-            nn.ConvTranspose2d(in_channels=nz, out_channels=ngf * 8, kernel_size=4, stride=1, padding=0, bias=False),
+            # 1x1 -> 4x4
+            nn.ConvTranspose2d(in_channels=nz, out_channels=ngf * 16, kernel_size=4, stride=1, padding=0, bias=False),
+            nn.BatchNorm2d(num_features=ngf * 16),
+            nn.ReLU(inplace=True),
+
+            # 4x4 -> 8x8
+            nn.ConvTranspose2d(in_channels=ngf * 16, out_channels=ngf * 8, kernel_size=4, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(num_features=ngf * 8),
             nn.ReLU(inplace=True),
 
-            nn.ConvTranspose2d(in_channels=ngf * 8, out_channels=ngf * 4,kernel_size=4, stride=2, padding=1, bias=False),
+            # 8x8 -> 16x16
+            nn.ConvTranspose2d(in_channels=ngf * 8, out_channels=ngf * 4, kernel_size=4, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(num_features=ngf * 4),
             nn.ReLU(inplace=True),
 
+            # 16x16 -> 32x32
             nn.ConvTranspose2d(in_channels=ngf * 4, out_channels=ngf * 2, kernel_size=4, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(num_features=ngf * 2),
             nn.ReLU(inplace=True),
 
+            # 32x32 -> 64x64
             nn.ConvTranspose2d(in_channels=ngf * 2, out_channels=ngf, kernel_size=4, stride=2, padding=1, bias=False),
             nn.BatchNorm2d(num_features=ngf),
             nn.ReLU(inplace=True),
 
-            nn.ConvTranspose2d(in_channels=ngf, out_channels=nc, kernel_size=4, stride=2, padding=1, bias=False),
-            nn.Tanh()
+            # 64x64 -> 128x128
+            nn.ConvTranspose2d(in_channels=ngf, out_channels=ngf // 2, kernel_size=4, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(num_features=ngf // 2),
+            nn.ReLU(inplace=True),
+
+            # 128x128 -> 256x256
+            nn.ConvTranspose2d(in_channels=ngf // 2, out_channels=nc, kernel_size=4, stride=2, padding=1, bias=False),
+            nn.Tanh(),
         )
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self._forward(x)

@@ -16,6 +16,13 @@ class AppParams:
     latent_size: int = 100
     generator_feature_map_size: int = 64
     discriminator_feature_map_size: int = 64
-    learning_rate: float = 0.0002
-    discriminator_beta1: float = 0.999
-    generator_beta1: float = 0.999
+    discriminator_lr: float = 0.0002
+    generator_lr: float = 0.0002
+    discriminator_beta1: float = 0.5
+    generator_beta1: float = 0.5
+    # One-sided label smoothing for real labels (1.0 disables)
+    label_smoothing_real: float = 1.0
+    # Evaluation and logging knobs
+    mifid_eval_every_epochs: int = 1  # 0 disables
+    mifid_eval_batches: int = 5
+    image_log_every_iters: int = 10
