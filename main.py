@@ -49,11 +49,11 @@ def parse_arguments():
     parser.add_argument(
         "--dataset_dir",
         type=str,
-        default="./data/monet/training",
+        default="./data/monet/training/monet_jpg",
         help="Path to the dataset directory, default: ./data/monet/training",
     )
-    parser.add_argument("--workers", type=int, default=1, help="Number of workers, default: 1")
-    parser.add_argument("--batch_size", type=int, default=128, help="Batch size, default: 128")
+    parser.add_argument("--workers", type=int, default=0, help="Number of workers, default: 0")
+    parser.add_argument("--batch_size", type=int, default=16, help="Batch size, default: 16")
     parser.add_argument(
         "--artifacts_folder",
         type=str,
@@ -76,7 +76,7 @@ def parse_arguments():
     parser.add_argument(
         "--latent_size",
         type=int,
-        default=100,
+        default=128,
         help="Size of z latent vector (i.e. size of generator input), default: 100",
     )
     parser.add_argument(
@@ -124,8 +124,8 @@ def parse_arguments():
     parser.add_argument(
         "--mifid_eval_every_epochs",
         type=int,
-        default=1,
-        help="Number of epochs between MIFID evaluations, default: 1",
+        default=10,
+        help="Number of epochs between MIFID evaluations, default: 10",
     )
     parser.add_argument(
         "--mifid_eval_batches",
