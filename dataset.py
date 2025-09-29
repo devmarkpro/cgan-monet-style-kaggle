@@ -36,7 +36,9 @@ class Dataset(TorchDataset):
             shuffle=True, 
             num_workers=workers,
             pin_memory=True if workers > 0 else False,
-            drop_last=True  # Ensure consistent batch sizes
+            drop_last=True,  # Ensure consistent batch sizes
+            persistent_workers=True if workers > 0 else False,  # Keep workers alive between epochs
+            prefetch_factor=2 if workers > 0 else None,  # Reduce memory usage
         )
 
     def __len__(self):

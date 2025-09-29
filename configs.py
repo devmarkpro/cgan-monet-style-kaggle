@@ -8,7 +8,7 @@ class AppParams:
     log_level: int = logging.INFO
     dataset_dir: str = "./data/monet/training"
     batch_size: int = 128
-    workers: int = 1
+    workers: int = 0
     epochs: int = 100
     artifacts_folder: str = "./artifacts"
     use_wandb: bool = False

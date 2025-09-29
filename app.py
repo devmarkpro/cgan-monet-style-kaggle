@@ -103,7 +103,8 @@ class App(object):
             
             im = ax.imshow(img.reshape((w,h,3)))
 
-        plt.show()        
+        plt.savefig(f"./artifacts/samples_{run_name}.png")
+        plt.close()
 
 
     def _set_random_seed(self):

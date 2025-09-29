@@ -4,7 +4,7 @@ import torchvision.utils as vutils
 from dataclasses import asdict
 from typing import Optional, Dict, Any
 from torchmetrics.image.mifid import MemorizationInformedFrechetInceptionDistance as MiFID
-
+import time
 from configs import AppParams
 
 
@@ -68,7 +68,7 @@ class MonetWandb:
         self.run.log(log_data, step=step)
     
     def log_epoch_summary(self, epoch: int, avg_d_loss: float, avg_g_loss: float, 
-                         samples: Optional[torch.Tensor] = None):
+                         samples: Optional[torch.Tensor] = None, step: Optional[int] = None):
         """
         Log epoch-level summary metrics and optionally generated samples.
         
@@ -77,6 +77,7 @@ class MonetWandb:
             avg_d_loss: Average discriminator loss for the epoch
             avg_g_loss: Average generator loss for the epoch
             samples: Generated samples tensor (optional)
+            step: Global step counter (optional, uses epoch if not provided)
         """
         log_data = {
             "epoch_summary/discriminator_loss": avg_d_loss,
@@ -95,7 +96,9 @@ class MonetWandb:
             except Exception as e:
                 print(f"Failed to log sample images: {e}")
         
-        self.run.log(log_data, step=epoch)
+        # Use provided step or fall back to epoch
+        log_step = step if step is not None else epoch
+        self.run.log(log_data, step=log_step)
     
     def log_model_gradients(self, generator: torch.nn.Module, discriminator: torch.nn.Module):
         """
@@ -186,8 +189,12 @@ class MonetWandb:
             step: Optional step counter for logging
         """
         try:
-            # Initialize MiFID metric
-            mifid = MiFID(feature=2048, normalize=False, reset_real_features=False)
+            
+            start_time = time.time()
+            
+            # Initialize MiFID metric with proper settings
+            # Use feature=768 for better quality assessment, normalize=True for proper preprocessing
+            mifid = MiFID(feature=768, normalize=True, reset_real_features=False)
             
             # Determine number of batches to evaluate
             if num_batches is None:
@@ -197,29 +204,44 @@ class MonetWandb:
             
             generator.eval()
             with torch.no_grad():
-                for i, (real_batch, _) in enumerate(dataloader):
+                for i, real_batch in enumerate(dataloader):
                     if i >= num_batches:
                         break
                     
                     # Process real images
                     real_batch = real_batch.to(device)
-                    real_uint8 = self._denorm_to_uint8(real_batch).cpu()
-                    mifid.update(real_uint8, real=True)
+                    # Convert from [-1,1] to [0,1] for MiFID (normalize=True expects [0,1])
+                    real_normalized = (real_batch + 1.0) / 2.0
+                    real_normalized = torch.clamp(real_normalized, 0.0, 1.0)
+                    
+                    # Resize to 299x299 for Inception-v3 (MiFID will handle this internally, but let's be explicit)
+                    real_resized = torch.nn.functional.interpolate(real_normalized, size=(299, 299), mode='bilinear', align_corners=False)
+                    mifid.update(real_resized.cpu(), real=True)
                     
                     # Generate fake images
                     batch_size = real_batch.size(0)
                     z = torch.randn(batch_size, latent_size, 1, 1, device=device)
                     fake_batch = generator(z).detach()
-                    fake_uint8 = self._denorm_to_uint8(fake_batch).cpu()
-                    mifid.update(fake_uint8, real=False)
+                    # Convert from [-1,1] to [0,1] for MiFID
+                    fake_normalized = (fake_batch + 1.0) / 2.0
+                    fake_normalized = torch.clamp(fake_normalized, 0.0, 1.0)
+                    
+                    # Resize to 299x299 for Inception-v3
+                    fake_resized = torch.nn.functional.interpolate(fake_normalized, size=(299, 299), mode='bilinear', align_corners=False)
+                    mifid.update(fake_resized.cpu(), real=False)
             
             # Compute MiFID score
+            compute_start = time.time()
             mifid_score = float(mifid.compute().item())
+            compute_time = time.time() - compute_start
+            
+            total_time = time.time() - start_time
             
             # Log to wandb
             log_data = {
                 "eval/mifid": mifid_score,
                 "eval/num_batches": num_batches,
+                "eval/mifid_time_seconds": total_time,
             }
             
             self.run.log(log_data, step=step)
