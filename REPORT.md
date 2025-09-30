@@ -57,13 +57,13 @@ The exploratory data analysis revealed crucial insights that informed our prepro
 
 ### 3.1 Image Properties Analysis
 
-![Image Properties](./report_material/eda/image_properties.png)
+![Image Properties](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/image_properties.png)
 
 The image properties analysis revealed significant variation in the original dimensions of Monet paintings, which is expected given the diverse canvas sizes used by the artist throughout his career. This heterogeneity necessitated standardized preprocessing to ensure consistent input dimensions for the neural network. The file size distribution indicated high-quality source images, providing rich detail for the model to learn from.
 
 ### 3.2 Pixel Distribution Analysis
 
-![Pixel Distributions](./report_material/eda/pixel_distributions.png)
+![Pixel Distributions](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/pixel_distributions.png)
 
 The pixel distribution analysis provided insights into the color characteristics of Monet's work:
 
@@ -75,23 +75,23 @@ These statistics reveal that Monet's paintings exhibit a slight bias toward warm
 
 ### 3.3 Color Analysis
 
-![Color Analysis](./report_material/eda/color_analysis.png)
+![Color Analysis](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/color_analysis.png)
 
 The color analysis demonstrates the rich palette characteristic of impressionist work. Monet's paintings show high saturation in key areas while maintaining subtle gradations that create the signature impressionist effect. The brightness distribution indicates a preference for well-lit scenes, consistent with Monet's focus on capturing natural light conditions.
 
 ### 3.4 Sample Visualizations
 
-![Sample Images](./report_material/eda/sample_images.png)
+![Sample Images](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/sample_images.png)
 
 The sample visualization shows both original and preprocessed versions of representative paintings. This comparison illustrates how our preprocessing pipeline maintains the essential artistic characteristics while standardizing the format for neural network input.
 
-![Sample Grid](./report_material/eda/sample_grid.png)
+![Sample Grid](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/sample_grid.png)
 
 The sample grid provides an overview of the dataset diversity, showcasing various subjects including landscapes, water scenes, and architectural elements that are hallmarks of Monet's work.
 
 ### 3.5 Quality Metrics
 
-![Quality Analysis](./report_material/eda/quality_analysis.png)
+![Quality Analysis](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eda/quality_analysis.png)
 
 The quality analysis revealed important characteristics:
 
@@ -271,25 +271,25 @@ The discriminator accuracy remained consistently at 100% throughout most of the 
 
 ### 6.2 Loss Evolution
 
-![Generator vs Discriminator Loss](./report_material/D-vs-G-Loss-stilted-elevator-52.png)
+![Generator vs Discriminator Loss](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/D-vs-G-Loss-stilted-elevator-52.png)
 
 The loss curves demonstrate healthy adversarial training dynamics. The generator and discriminator losses show the characteristic oscillatory behavior expected in GAN training, with neither network completely dominating the other. This balance is crucial for generating high-quality artistic images.
 
-![Generator Loss](./report_material/generator_loss-stilted-elevator-52.png)
+![Generator Loss](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generator_loss-stilted-elevator-52.png)
 
 The generator loss shows a general downward trend with periodic fluctuations, indicating successful learning of the artistic style distribution while maintaining diversity in generated outputs.
 
-![Discriminator Loss](./report_material/discriminator_loss-stilted-elevator-52.png)
+![Discriminator Loss](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/discriminator_loss-stilted-elevator-52.png)
 
 The discriminator loss maintains reasonable values throughout training, suggesting it successfully learned to distinguish between real and generated Monet paintings without becoming too powerful and preventing generator learning.
 
 ### 6.3 Quality Assessment
 
-![MiFID Score Evolution](./report_material/eval_mifid_stilted-elevator-52.png)
+![MiFID Score Evolution](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eval_mifid_stilted-elevator-52.png)
 
 The MiFID (Memorization-informed Fréchet Inception Distance) score provides an objective measure of generation quality. The final MiFID score achieved was **1.4698**, indicating excellent generation quality and strong alignment with the target artistic style. This low score demonstrates that the generated images successfully capture the statistical properties of Monet's artistic style without simply memorizing training examples.
 
-![MiFID Evaluation Time](./report_material/eval_mifid_time-stilted-elevator-52.png)
+![MiFID Evaluation Time](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/eval_mifid_time-stilted-elevator-52.png)
 
 The evaluation timing shows consistent performance throughout the training process, with no significant degradation in computational efficiency.
 
@@ -299,31 +299,31 @@ The following images demonstrate the progression of generated artwork quality th
 
 **Epoch 424:**
 
-![Generated Images - Epoch 424](./report_material/generated_image_epoch_424.png)
+![Generated Images - Epoch 424](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generated_image_epoch_424.png)
 
 Early training shows basic color patterns and rough compositional elements beginning to emerge.
 
 **Epoch 500:**
 
-![Generated Images - Epoch 500](./report_material/generated_image_epoch_500.png)
+![Generated Images - Epoch 500](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generated_image_epoch_500.png)
 
 Improved coherence in color relationships and more defined structural elements.
 
 **Epoch 1530:**
 
-![Generated Images - Epoch 1530](./report_material/generated_image_epoch_1530.png)
+![Generated Images - Epoch 1530](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generated_image_epoch_1530.png)
 
 Mid-training results show significant improvement in artistic coherence and style consistency.
 
 **Epoch 3000:**
 
-![Generated Images - Epoch 3000](./report_material/generated_image_epoch_3000.png)
+![Generated Images - Epoch 3000](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generated_image_epoch_3000.png)
 
 Advanced training demonstrates sophisticated understanding of impressionist techniques.
 
 **Epoch 5000 (Final):**
 
-![Generated Images - Epoch 5000](./report_material/generated_image_epoch_5000.png)
+![Generated Images - Epoch 5000](https://raw.githubusercontent.com/devmarkpro/dcgan-monet-style-kaggle/main/report_material/generated_image_epoch_5000.png)
 
 Final results exhibit mature artistic style with convincing Monet-like characteristics including appropriate color palettes, brushwork patterns, and compositional elements.
 
