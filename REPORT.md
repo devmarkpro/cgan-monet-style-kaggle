@@ -3,24 +3,24 @@
 **Course:** CSCA 5642: Introduction to Deep Learning  
 **Institution:** CU Boulder University  
 **Author:** Mark  
-**Date:** September 2024  
+**Date:** September 2025
 **GitHub Repository:** https://github.com/devmarkpro/dcgan-monet-style-kaggle
 
 ---
 
 ## Abstract
 
-This report presents the implementation and evaluation of a Deep Convolutional Generative Adversarial Network (DCGAN) for generating Monet-style paintings. The project addresses the challenge of creating synthetic artwork that captures the distinctive impressionist characteristics of Claude Monet's paintings. Through careful architecture design, data preprocessing, and training optimization, we successfully developed a model capable of generating 8,000 high-quality 256x256 Monet-style images. The implementation demonstrates the effectiveness of adversarial training in learning complex artistic styles and provides insights into the practical considerations of GAN training for artistic image synthesis.
+This report presents the implementation and evaluation of a Deep Convolutional Generative Adversarial Network (DCGAN) for generating Monet-style paintings. The project addresses the challenge of creating artificial artwork that captures the unique impressionist characteristics of Claude Monet's paintings. Through careful architecture design, data preprocessing, and training optimization, we successfully developed a model that can generate 8,000 high-quality 256x256 Monet-style images. The implementation shows the effectiveness of adversarial training in learning complex artistic styles and provides insights into the practical considerations of GAN training for artistic image creation.
 
 ---
 
 ## 1. Problem Statement
 
-The primary objective of this project is to develop a generative model capable of creating synthetic images that emulate the distinctive artistic style of Claude Monet, the renowned French impressionist painter. This problem falls within the domain of style transfer and artistic image generation, which has significant applications in digital art, content creation, and cultural preservation.
+The main goal of this project is to develop a generative model that can create artificial images that copy the unique artistic style of Claude Monet, the famous French impressionist painter. This work was conducted as part of the Kaggle "I'm Something of a Painter Myself" competition [6]. This problem belongs to the area of style transfer and artistic image generation, which has important applications in digital art, content creation, and cultural preservation.
 
 ### 1.1 Motivation
 
-Monet's impressionist style is characterized by loose brushwork, emphasis on light and its changing qualities, and vibrant color palettes. Traditional computer graphics approaches struggle to capture these nuanced artistic elements, making deep learning-based generative models an attractive solution. The challenge lies in training a model that can understand and reproduce the complex visual patterns, color relationships, and compositional elements that define Monet's artistic signature.
+Monet's impressionist style is characterized by loose brushwork, emphasis on light and its changing qualities, and vibrant color palettes. Traditional computer graphics approaches struggle to capture these detailed artistic elements, making deep learning-based generative models an attractive solution. The challenge is in training a model that can understand and reproduce the complex visual patterns, color relationships, and compositional elements that define Monet's artistic style.
 
 ### 1.2 Technical Challenges
 
@@ -37,7 +37,7 @@ The main technical challenges include:
 
 ### 2.1 Dataset Overview
 
-The dataset consists of 300 high-quality digital reproductions of Monet paintings, stored in JPEG format within the `./data/monet/training/monet_jpg` directory. This relatively small dataset size is typical for artistic style transfer tasks, where quality often matters more than quantity.
+The dataset consists of 300 high-quality digital reproductions of Monet paintings, stored in JPEG format within the `./data/monet/training/monet_jpg` directory [6]. This relatively small dataset size is typical for artistic style transfer tasks, where quality often matters more than quantity. The dataset was provided as part of the Kaggle "I'm Something of a Painter Myself" competition, which focuses on GAN-based artistic style transfer.
 
 ### 2.2 Basic Statistics
 
@@ -106,7 +106,7 @@ The wide sharpness range reflects Monet's varied brushwork techniques, from soft
 
 ### 4.1 Preprocessing Pipeline
 
-Based on the EDA findings, we implemented a carefully designed preprocessing pipeline that balances computational efficiency with artistic fidelity:
+Based on the EDA findings, we implemented a carefully designed preprocessing pipeline that balances computational efficiency with artistic quality:
 
 ```python
 self.transform = transforms.Compose([
@@ -120,7 +120,7 @@ self.transform = transforms.Compose([
 ### 4.2 Design Rationale
 
 **Resolution Reduction to 64x64:**
-The decision to reduce image resolution from the original dimensions to 64x64 pixels was driven by several strategic factors:
+The decision to reduce image resolution from the original dimensions to 64x64 pixels was based on several important factors:
 
 1. **Computational Efficiency:** Training at full resolution (256x256 or higher) would require significantly more computational resources and training time
 2. **Training Stability:** Lower resolution reduces the complexity of the learning task, leading to more stable GAN training dynamics
@@ -131,7 +131,7 @@ The decision to reduce image resolution from the original dimensions to 64x64 pi
 Center cropping ensures that the most important compositional elements are preserved while maintaining aspect ratio consistency across the dataset.
 
 **Normalization Strategy:**
-The normalization to [-1, 1] range using [0.5, 0.5, 0.5] mean and standard deviation is specifically chosen for GAN training, as it matches the output range of the generator's tanh activation function.
+The normalization to [-1, 1] range using [0.5, 0.5, 0.5] mean and standard deviation is chosen specifically for GAN training, as it matches the output range of the generator's tanh activation function.
 
 ### 4.3 Post-Processing for Submission
 
@@ -143,7 +143,7 @@ To meet the 256x256 pixel requirement for final submission, we implemented a hig
 
 ### 5.1 Architecture Overview
 
-Our implementation follows the DCGAN (Deep Convolutional Generative Adversarial Network) architecture, which has proven effective for image generation tasks. The system consists of two competing neural networks: a generator that creates synthetic images and a discriminator that distinguishes between real and generated images.
+Our implementation follows the DCGAN (Deep Convolutional Generative Adversarial Network) architecture, which has proven effective for image generation tasks. The system consists of two competing neural networks: a generator that creates artificial images and a discriminator that tells the difference between real and generated images.
 
 ### 5.2 Generator Architecture
 
@@ -164,7 +164,7 @@ nn.ConvTranspose2d(ngf, 3, 4, 2, 1, bias=False)               # 32x32 -> 64x64
 - **Activation Functions:** ReLU activations in hidden layers with Tanh output to match the [-1, 1] normalized input range
 - **Batch Normalization:** Applied to all layers except the output to stabilize training
 
-The generator architecture is specifically designed to capture hierarchical artistic features, from basic color patterns in early layers to complex compositional elements in later layers.
+The generator architecture is designed specifically to capture hierarchical artistic features, from basic color patterns in early layers to complex compositional elements in later layers.
 
 **Actual Architecture Implementation:**
 Based on the training logs, the generator network consists of:
@@ -176,11 +176,11 @@ ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2))   # 16x16 -> 32x32
 ConvTranspose2d(64, 3, kernel_size=(4, 4), stride=(2, 2))    # 32x32 -> 64x64
 ```
 
-This progressive upsampling allows the network to build artistic features hierarchically, starting with basic color and texture patterns and gradually adding more complex compositional elements.
+This progressive upsampling allows the network to build artistic features step by step, starting with basic color and texture patterns and gradually adding more complex compositional elements.
 
 ### 5.3 Discriminator Architecture
 
-The discriminator serves as a binary classifier that learns to distinguish authentic Monet paintings from generated images:
+The discriminator works as a binary classifier that learns to tell the difference between authentic Monet paintings and generated images:
 
 ```python
 # Discriminator Architecture (64x64 input)
@@ -207,7 +207,7 @@ Conv2d(256, 512, kernel_size=(4, 4), stride=(2, 2))  # 8x8 -> 4x4
 Conv2d(512, 1, kernel_size=(4, 4), stride=(1, 1))   # 4x4 -> 1x1
 ```
 
-This architecture effectively learns to distinguish between authentic Monet paintings and generated images by progressively extracting features at multiple scales.
+This architecture effectively learns to tell the difference between authentic Monet paintings and generated images by progressively extracting features at multiple scales.
 
 ### 5.4 Training Dynamics
 
@@ -298,26 +298,31 @@ The evaluation timing shows consistent performance throughout the training proce
 The following images demonstrate the progression of generated artwork quality throughout training:
 
 **Epoch 424:**
+
 ![Generated Images - Epoch 424](./report_material/generated_image_epoch_424.png)
 
 Early training shows basic color patterns and rough compositional elements beginning to emerge.
 
 **Epoch 500:**
+
 ![Generated Images - Epoch 500](./report_material/generated_image_epoch_500.png)
 
 Improved coherence in color relationships and more defined structural elements.
 
 **Epoch 1530:**
+
 ![Generated Images - Epoch 1530](./report_material/generated_image_epoch_1530.png)
 
 Mid-training results show significant improvement in artistic coherence and style consistency.
 
 **Epoch 3000:**
+
 ![Generated Images - Epoch 3000](./report_material/generated_image_epoch_3000.png)
 
 Advanced training demonstrates sophisticated understanding of impressionist techniques.
 
 **Epoch 5000 (Final):**
+
 ![Generated Images - Epoch 5000](./report_material/generated_image_epoch_5000.png)
 
 Final results exhibit mature artistic style with convincing Monet-like characteristics including appropriate color palettes, brushwork patterns, and compositional elements.
@@ -353,19 +358,19 @@ The project provided several important insights into GAN training for artistic a
 
 - **Dataset Size Considerations:** A focused dataset of 300 high-quality images proved sufficient for learning artistic style
 - **Resolution Strategy:** Training at 64x64 with post-processing upscaling balanced computational efficiency with output quality
-- **Architecture Effectiveness:** Standard DCGAN architecture adapted well to artistic image generation
+- **Architecture Effectiveness:** Standard DCGAN architecture worked well for artistic image generation
 - **Training Stability:** Careful hyperparameter tuning and monitoring prevented common GAN training issues like mode collapse
-- **Convergence Metrics:** The final MiFID score of 1.4698 demonstrates exceptional quality, significantly better than typical benchmarks
+- **Convergence Metrics:** The final MiFID score of 1.4698 shows exceptional quality, significantly better than typical benchmarks
 - **Computational Efficiency:** Training completed in just over an hour on Apple Silicon, showing the efficiency of the 64x64 approach
 - **Loss Balance:** Maintaining discriminator accuracy at 100% while keeping generator loss decreasing indicates optimal adversarial balance
 
 ### 7.3 Limitations and Future Work
 
-While the project achieved its primary objectives, several areas present opportunities for future enhancement:
+While the project achieved its main objectives, several areas present opportunities for future improvement:
 
 1. **Resolution:** Direct training at higher resolutions could improve fine detail quality
 2. **Dataset Expansion:** Additional training data could increase output diversity
-3. **Architecture Improvements:** Progressive growing or attention mechanisms could enhance generation quality
+3. **Architecture Improvements:** Progressive growing or attention mechanisms could improve generation quality
 4. **Style Control:** Conditional generation could allow for more targeted artistic control
 
 ### 7.4 Educational Value
@@ -386,11 +391,13 @@ The implementation provides a solid foundation for understanding both the theore
 
 [2] Goodfellow, I., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., & Bengio, Y. (2014). Generative Adversarial Nets. *Advances in Neural Information Processing Systems*, 27. Available at: https://arxiv.org/abs/1406.2661
 
-[3] PyTorch Team. (2023). DCGAN Tutorial. *PyTorch Tutorials*. Available at: https://docs.pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html
+[3] PyTorch Team. DCGAN Tutorial. *PyTorch Tutorials*. Available at: https://docs.pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html
 
-[4] Weights & Biases Team. (2023). Tables Tutorial. *Weights & Biases Documentation*. Available at: https://docs.wandb.ai/tutorials/tables/
+[4] Weights & Biases Team. Tables Tutorial. *Weights & Biases Documentation*. Available at: https://docs.wandb.ai/tutorials/tables/
 
-[5] Lightning AI Team. (2023). Memorization-Informed Fréchet Inception Distance (MiFID). *TorchMetrics Documentation*. Available at: https://lightning.ai/docs/torchmetrics/stable/image/mifid.html
+[5] Lightning AI Team. Memorization-Informed Fréchet Inception Distance (MiFID). *TorchMetrics Documentation*. Available at: https://lightning.ai/docs/torchmetrics/stable/image/mifid.html
+
+[6] Amy Jang, Ana Sofia Uzsoy, and Phil Culliton. I’m Something of a Painter Myself. https://kaggle.com/competitions/gan-getting-started, 2020. Kaggle.
 
 ---
 
