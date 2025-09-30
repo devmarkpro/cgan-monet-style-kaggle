@@ -223,5 +223,26 @@ class DCGAN:
                 
                 # Increment global step after all epoch logging is complete
                 global_step += 1
+        
+        # Save the final trained models
+        self._save_final_models()
             
         return samples, losses
+    
+    def _save_final_models(self):
+        """Save the final trained generator and discriminator models"""
+        import os
+        from pathlib import Path
+        
+        # Create artifacts directory if it doesn't exist
+        Path(self.config.artifacts_folder).mkdir(parents=True, exist_ok=True)
+        
+        # Save generator
+        generator_path = os.path.join(self.config.artifacts_folder, f"generator_{utils.get_run_name(self.wandb_logger)}.pth")
+        torch.save(self.generator.state_dict(), generator_path)
+        logger.log(f"✅ Generator saved to {generator_path}", color=logger.Colors.GREEN)
+        
+        # Save discriminator  
+        discriminator_path = os.path.join(self.config.artifacts_folder, f"discriminator_{utils.get_run_name(self.wandb_logger)}.pth")
+        torch.save(self.discriminator.state_dict(), discriminator_path)
+        logger.log(f"✅ Discriminator saved to {discriminator_path}", color=logger.Colors.GREEN)

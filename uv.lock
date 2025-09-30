@@ -719,6 +719,7 @@ dependencies = [
     { name = "torch-fidelity" },
     { name = "torchmetrics" },
     { name = "torchvision" },
+    { name = "tqdm" },
     { name = "wandb" },
 ]
 
@@ -745,6 +746,7 @@ requires-dist = [
     { name = "torch-fidelity", specifier = ">=0.3.0" },
     { name = "torchmetrics", specifier = ">=1.0.0" },
     { name = "torchvision", specifier = ">=0.15.0" },
+    { name = "tqdm", specifier = ">=4.67.1" },
     { name = "wandb", specifier = ">=0.22.0" },
 ]
 provides-extras = ["dev"]

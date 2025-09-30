@@ -5,13 +5,13 @@ import random
 import time
 
 import torch
-import wandb
 import numpy as np
 from torch import nn, optim
 from torch.optim.lr_scheduler import LinearLR
 from torchmetrics.image.mifid import (
     MemorizationInformedFrechetInceptionDistance as MiFID,
 )
+from wandb import util
 
 from configs import AppParams
 import utils
@@ -73,7 +73,7 @@ class App(object):
             wandb_logger=wandb_logger
         )
         samples, losses = dcgan.train()
-        run_name = self.wandb.run.name if self.configs.use_wandb else f"run_{random.randint(0, 1000)}"
+        run_name = utils.get_run_name(wandb_logger)
         
         logger.log(f"Saving samples")
         samples_path = f"./artifacts/samples_{run_name}.npy"

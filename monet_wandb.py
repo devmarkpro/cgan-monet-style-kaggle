@@ -6,7 +6,8 @@ from typing import Optional, Dict, Any
 from torchmetrics.image.mifid import MemorizationInformedFrechetInceptionDistance as MiFID
 import time
 from configs import AppParams
-
+import logger
+import logging
 
 class MonetWandb:
     def __init__(self, project_name: str, params: AppParams):
@@ -94,7 +95,7 @@ class MonetWandb:
                     img_grid, caption=f"Generated samples - Epoch {epoch}"
                 )
             except Exception as e:
-                print(f"Failed to log sample images: {e}")
+                logger.log(f"Failed to log sample images: {e}", level=logging.ERROR)
         
         # Use provided step or fall back to epoch
         log_step = step if step is not None else epoch
@@ -112,7 +113,7 @@ class MonetWandb:
             wandb.watch(generator, log="gradients", log_freq=100)
             wandb.watch(discriminator, log="gradients", log_freq=100)
         except Exception as e:
-            print(f"Failed to set up gradient logging: {e}")
+            logger.log(f"Failed to set up gradient logging: {e}", level=logging.ERROR)
     
     def log_system_metrics(self, gpu_memory_allocated: Optional[float] = None, 
                           gpu_memory_reserved: Optional[float] = None):
@@ -173,7 +174,7 @@ class MonetWandb:
             self.run.log(log_data, step=step)
             
         except Exception as e:
-            print(f"Failed to log image grids: {e}")
+            logger.log(f"Failed to log image grids: {e}", level=logging.ERROR)
     
     def evaluate_mifid(self, generator, dataloader, latent_size: int, device, 
                       num_batches: Optional[int] = None, step: Optional[int] = None):
@@ -249,7 +250,7 @@ class MonetWandb:
             return mifid_score
             
         except Exception as e:
-            print(f"MiFID evaluation failed: {e}")
+            logger.log(msg=f"MiFID evaluation failed: {e}", color=Colors.RED, level=logging.ERROR)
             return None
     
     def _denorm_to_uint8(self, tensor):
