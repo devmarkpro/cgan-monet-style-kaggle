@@ -57,13 +57,13 @@ The exploratory data analysis revealed crucial insights that informed our prepro
 
 ### 3.1 Image Properties Analysis
 
-![Image Properties](./artifacts/eda/image_properties.png)
+![Image Properties](./report_material/eda/image_properties.png)
 
 The image properties analysis revealed significant variation in the original dimensions of Monet paintings, which is expected given the diverse canvas sizes used by the artist throughout his career. This heterogeneity necessitated standardized preprocessing to ensure consistent input dimensions for the neural network. The file size distribution indicated high-quality source images, providing rich detail for the model to learn from.
 
 ### 3.2 Pixel Distribution Analysis
 
-![Pixel Distributions](./artifacts/eda/pixel_distributions.png)
+![Pixel Distributions](./report_material/eda/pixel_distributions.png)
 
 The pixel distribution analysis provided insights into the color characteristics of Monet's work:
 
@@ -75,23 +75,23 @@ These statistics reveal that Monet's paintings exhibit a slight bias toward warm
 
 ### 3.3 Color Analysis
 
-![Color Analysis](./artifacts/eda/color_analysis.png)
+![Color Analysis](./report_material/eda/color_analysis.png)
 
 The color analysis demonstrates the rich palette characteristic of impressionist work. Monet's paintings show high saturation in key areas while maintaining subtle gradations that create the signature impressionist effect. The brightness distribution indicates a preference for well-lit scenes, consistent with Monet's focus on capturing natural light conditions.
 
 ### 3.4 Sample Visualizations
 
-![Sample Images](./artifacts/eda/sample_images.png)
+![Sample Images](./report_material/eda/sample_images.png)
 
 The sample visualization shows both original and preprocessed versions of representative paintings. This comparison illustrates how our preprocessing pipeline maintains the essential artistic characteristics while standardizing the format for neural network input.
 
-![Sample Grid](./artifacts/eda/sample_grid.png)
+![Sample Grid](./report_material/eda/sample_grid.png)
 
 The sample grid provides an overview of the dataset diversity, showcasing various subjects including landscapes, water scenes, and architectural elements that are hallmarks of Monet's work.
 
 ### 3.5 Quality Metrics
 
-![Quality Analysis](./artifacts/eda/quality_analysis.png)
+![Quality Analysis](./report_material/eda/quality_analysis.png)
 
 The quality analysis revealed important characteristics:
 
@@ -423,18 +423,18 @@ dcgan-monet-style-kaggle/
 
 The main.py script accepts the following key parameters:
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `--epochs` | 100 | Number of training epochs |
-| `--batch_size` | 16 | Training batch size |
-| `--latent_size` | 128 | Dimension of noise vector |
-| `--generator_feature_map_size` | 16 | Generator feature map base size |
-| `--discriminator_feature_map_size` | 16 | Discriminator feature map base size |
-| `--generator_lr` | 0.0002 | Generator learning rate |
-| `--discriminator_lr` | 0.0002 | Discriminator learning rate |
-| `--use_wandb` | 0 | Enable Weights & Biases logging |
-| `--image_log_every_iters` | 50 | Frequency of image logging |
-| `--mifid_eval_every_epochs` | 50 | Frequency of MiFID evaluation |
+| Parameter                          | Default | Description                         |
+| ---------------------------------- | ------- | ----------------------------------- |
+| `--epochs`                         | 100     | Number of training epochs           |
+| `--batch_size`                     | 16      | Training batch size                 |
+| `--latent_size`                    | 128     | Dimension of noise vector           |
+| `--generator_feature_map_size`     | 16      | Generator feature map base size     |
+| `--discriminator_feature_map_size` | 16      | Discriminator feature map base size |
+| `--generator_lr`                   | 0.0002  | Generator learning rate             |
+| `--discriminator_lr`               | 0.0002  | Discriminator learning rate         |
+| `--use_wandb`                      | 0       | Enable Weights & Biases logging     |
+| `--image_log_every_iters`          | 50      | Frequency of image logging          |
+| `--mifid_eval_every_epochs`        | 50      | Frequency of MiFID evaluation       |
 
 ### 9.3 Running the Project
 

@@ -1,0 +1,7 @@
+=== PIXEL DISTRIBUTION STATISTICS ===
+
+Sample size: 20 images
+
+Red Channel:   122.02 ± 52.45
+Green Channel: 123.96 ± 50.06
+Blue Channel:  110.35 ± 54.61

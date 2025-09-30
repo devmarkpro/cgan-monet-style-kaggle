@@ -1,0 +1,9 @@
+=== IMAGE QUALITY STATISTICS ===
+
+Sample size: 50 images
+
+Sharpness: 166.23 ± 117.05
+Contrast:  45.04 ± 11.92
+
+Sharpness range: 17.67 - 588.09
+Contrast range:  21.90 - 67.34

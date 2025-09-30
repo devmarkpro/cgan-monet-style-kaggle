@@ -1,0 +1,7 @@
+=== MONET DATASET STATISTICS ===
+
+Total Images: 300
+Dataset Directory: ./data/monet/training/monet_jpg
+Batch Size: 16
+Image Extensions: .jpg
+Images per batch: 18
