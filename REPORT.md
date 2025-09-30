@@ -29,7 +29,7 @@ The main technical challenges include:
 - Maintaining visual coherence while generating diverse outputs
 - Balancing the adversarial training dynamics between generator and discriminator
 - Preventing mode collapse in the artistic domain
-- Scaling generated images to meet submission requirements (256x256 pixels)
+- Scaling generated images to meet submission requirements ($256 \times 256$ pixels)
 
 ---
 
@@ -67,9 +67,9 @@ The image properties analysis revealed significant variation in the original dim
 
 The pixel distribution analysis provided insights into the color characteristics of Monet's work:
 
-- **Red Channel:** Mean = 122.02, Standard Deviation = 52.45
-- **Green Channel:** Mean = 123.96, Standard Deviation = 50.06  
-- **Blue Channel:** Mean = 110.35, Standard Deviation = 54.61
+- **Red Channel:** Mean $= 122.02$, Standard Deviation $= 52.45$
+- **Green Channel:** Mean $= 123.96$, Standard Deviation $= 50.06$  
+- **Blue Channel:** Mean $= 110.35$, Standard Deviation $= 54.61$
 
 These statistics reveal that Monet's paintings exhibit a slight bias toward warmer tones (higher red and green values) with the blue channel showing the highest variance, reflecting his diverse use of sky and water elements. The relatively balanced channel means suggest good color distribution across the spectrum, which is favorable for GAN training.
 
@@ -95,8 +95,8 @@ The sample grid provides an overview of the dataset diversity, showcasing variou
 
 The quality analysis revealed important characteristics:
 
-- **Sharpness:** Mean = 166.23, Standard Deviation = 117.05 (Range: 17.67 - 588.09)
-- **Contrast:** Mean = 45.04, Standard Deviation = 11.92 (Range: 21.90 - 67.34)
+- **Sharpness:** Mean $= 166.23$, Standard Deviation $= 117.05$ (Range: $17.67 - 588.09$)
+- **Contrast:** Mean $= 45.04$, Standard Deviation $= 11.92$ (Range: $21.90 - 67.34$)
 
 The wide sharpness range reflects Monet's varied brushwork techniques, from soft, blended areas to more defined structural elements. The moderate contrast values are consistent with impressionist techniques that often favor subtle tonal variations over stark contrasts.
 
@@ -119,23 +119,23 @@ self.transform = transforms.Compose([
 
 ### 4.2 Design Rationale
 
-**Resolution Reduction to 64x64:**
-The decision to reduce image resolution from the original dimensions to 64x64 pixels was based on several important factors:
+**Resolution Reduction to $64 \times 64$:**
+The decision to reduce image resolution from the original dimensions to $64 \times 64$ pixels was based on several important factors:
 
-1. **Computational Efficiency:** Training at full resolution (256x256 or higher) would require significantly more computational resources and training time
+1. **Computational Efficiency:** Training at full resolution ($256 \times 256$ or higher) would require significantly more computational resources and training time
 2. **Training Stability:** Lower resolution reduces the complexity of the learning task, leading to more stable GAN training dynamics
-3. **Pattern Focus:** At 64x64, the model focuses on essential artistic patterns and color relationships rather than fine details, which aligns well with impressionist aesthetics
+3. **Pattern Focus:** At $64 \times 64$, the model focuses on essential artistic patterns and color relationships rather than fine details, which aligns well with impressionist aesthetics
 4. **Memory Constraints:** Enables efficient batch processing within available GPU memory, particularly important for Apple Silicon MPS backend
 
 **Center Cropping:**
 Center cropping ensures that the most important compositional elements are preserved while maintaining aspect ratio consistency across the dataset.
 
 **Normalization Strategy:**
-The normalization to [-1, 1] range using [0.5, 0.5, 0.5] mean and standard deviation is chosen specifically for GAN training, as it matches the output range of the generator's tanh activation function.
+The normalization to $[-1, 1]$ range using $[0.5, 0.5, 0.5]$ mean and standard deviation is chosen specifically for GAN training, as it matches the output range of the generator's tanh activation function.
 
 ### 4.3 Post-Processing for Submission
 
-To meet the 256x256 pixel requirement for final submission, we implemented a high-quality upscaling process using LANCZOS resampling, which preserves artistic details while scaling the generated 64x64 images to the required dimensions.
+To meet the $256 \times 256$ pixel requirement for final submission, we implemented a high-quality upscaling process using LANCZOS resampling, which preserves artistic details while scaling the generated $64 \times 64$ images to the required dimensions.
 
 ---
 
@@ -161,7 +161,7 @@ nn.ConvTranspose2d(ngf, 3, 4, 2, 1, bias=False)               # 32x32 -> 64x64
 **Key Design Elements:**
 - **Latent Vector Size:** 128 dimensions provide sufficient capacity for encoding artistic variations
 - **Feature Map Progression:** Follows the standard DCGAN pattern of halving feature maps while doubling spatial dimensions
-- **Activation Functions:** ReLU activations in hidden layers with Tanh output to match the [-1, 1] normalized input range
+- **Activation Functions:** ReLU activations in hidden layers with Tanh output to match the $[-1, 1]$ normalized input range
 - **Batch Normalization:** Applied to all layers except the output to stabilize training
 
 The generator architecture is designed specifically to capture hierarchical artistic features, from basic color patterns in early layers to complex compositional elements in later layers.
@@ -258,7 +258,7 @@ uv run main.py gan --epochs 5000 --image_log_every_iters 100 --mifid_eval_every_
 - **Generator Feature Maps:** 64
 - **Discriminator Feature Maps:** 64
 - **Learning Rate:** 0.0002 (both networks)
-- **Beta Parameters:** β₁ = 0.5, β₂ = 0.999
+- **Beta Parameters:** $\beta_1 = 0.5$, $\beta_2 = 0.999$
 
 **Training Dynamics Analysis:**
 The training logs reveal excellent convergence characteristics. Early epochs showed typical GAN initialization behavior:
@@ -267,7 +267,7 @@ The training logs reveal excellent convergence characteristics. Early epochs sho
 - **Epoch 100:** Stabilized around D_loss: ~0.95, G_loss: ~1.9
 - **Final Epoch (5000):** D_loss: 0.8335, G_loss: 1.7476, D(x): 0.7859
 
-The discriminator accuracy remained consistently at 100% throughout most of the training, indicating strong learning without mode collapse. The D(x) values stabilized around 0.78-0.82, showing the discriminator learned to properly evaluate real Monet paintings.
+The discriminator accuracy remained consistently at $100\%$ throughout most of the training, indicating strong learning without mode collapse. The D(x) values stabilized around $0.78-0.82$, showing the discriminator learned to properly evaluate real Monet paintings.
 
 ### 6.2 Loss Evolution
 
@@ -329,7 +329,7 @@ Final results exhibit mature artistic style with convincing Monet-like character
 
 ### 6.5 Final Output Generation
 
-The trained model successfully generated 8,000 unique Monet-style images at 256x256 resolution for submission. The upscaling from 64x64 to 256x256 using LANCZOS resampling preserved the artistic qualities while meeting the technical requirements.
+The trained model successfully generated 8,000 unique Monet-style images at $256 \times 256$ resolution for submission. The upscaling from $64 \times 64$ to $256 \times 256$ using LANCZOS resampling preserved the artistic qualities while meeting the technical requirements.
 
 **Final Model Performance:**
 - **Model Name:** stilted-elevator-52 (WandB run name)
@@ -337,7 +337,7 @@ The trained model successfully generated 8,000 unique Monet-style images at 256x
 - **Generator Loss:** 1.7476
 - **Discriminator Loss:** 0.8335
 - **Training Efficiency:** ~0.75 seconds per epoch
-- **Generated Images:** 8,000 high-quality 256x256 Monet-style paintings
+- **Generated Images:** 8,000 high-quality $256 \times 256$ Monet-style paintings
 
 ---
 
@@ -357,12 +357,12 @@ This project successfully demonstrates the application of Deep Convolutional Gen
 The project provided several important insights into GAN training for artistic applications:
 
 - **Dataset Size Considerations:** A focused dataset of 300 high-quality images proved sufficient for learning artistic style
-- **Resolution Strategy:** Training at 64x64 with post-processing upscaling balanced computational efficiency with output quality
+- **Resolution Strategy:** Training at $64 \times 64$ with post-processing upscaling balanced computational efficiency with output quality
 - **Architecture Effectiveness:** Standard DCGAN architecture worked well for artistic image generation
 - **Training Stability:** Careful hyperparameter tuning and monitoring prevented common GAN training issues like mode collapse
 - **Convergence Metrics:** The final MiFID score of 1.4698 shows exceptional quality, significantly better than typical benchmarks
-- **Computational Efficiency:** Training completed in just over an hour on Apple Silicon, showing the efficiency of the 64x64 approach
-- **Loss Balance:** Maintaining discriminator accuracy at 100% while keeping generator loss decreasing indicates optimal adversarial balance
+- **Computational Efficiency:** Training completed in just over an hour on Apple Silicon, showing the efficiency of the $64 \times 64$ approach
+- **Loss Balance:** Maintaining discriminator accuracy at $100\%$ while keeping generator loss decreasing indicates optimal adversarial balance
 
 ### 7.3 Limitations and Future Work
 
@@ -472,7 +472,7 @@ The `generate_submission_images.py` script provides flexible image generation ca
 
 **Key Features:**
 - Automatic model loading with latent size detection
-- High-quality LANCZOS upscaling from 64x64 to 256x256
+- High-quality LANCZOS upscaling from $64 \times 64$ to $256 \times 256$
 - Batch processing for memory efficiency
 - Progress tracking and quality verification
 - Configurable output parameters
