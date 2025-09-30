@@ -2,7 +2,7 @@
 
 **Course:** CSCA 5642: Introduction to Deep Learning  
 **Institution:** CU Boulder University  
-**Author:** Mark Karamyar
+**Author:** Mark Karamyar (mark.karamyar@colorado.edu)
 **Date:** September 2025
 **GitHub Repository:** https://github.com/devmarkpro/dcgan-monet-style-kaggle
 
