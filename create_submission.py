@@ -9,9 +9,9 @@ from generate_submission_images import generate_submission_images
 
 def main():
     print("🎨 Creating Monet-style images for submission...")
-    
+    run_name = "stilted-elevator-52"
     # Configuration
-    generator_path = "./artifacts/generator_final.pth"
+    generator_path = f"./artifacts/generator_{run_name}.pth"
     output_dir = "./artifacts/submission_images"
     num_images = 8000  # Generate 8,000 images (within 7k-10k range)
     batch_size = 64
