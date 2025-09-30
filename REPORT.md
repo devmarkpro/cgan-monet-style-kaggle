@@ -3,7 +3,7 @@
 **Course:** CSCA 5642: Introduction to Deep Learning  
 **Institution:** CU Boulder University  
 **Author:** Mark  
-**Date:** September 2025  
+**Date:** September 2024  
 **GitHub Repository:** https://github.com/devmarkpro/dcgan-monet-style-kaggle
 
 ---
@@ -43,7 +43,7 @@ The dataset consists of 300 high-quality digital reproductions of Monet painting
 
 - **Total Images:** 300
 - **Format:** JPEG (.jpg)
-- **Batch Configuration:** 16 images per batch (18 batches total)
+- **Batch Configuration:** 16 images per batch (18 complete batches, 12 images dropped due to `drop_last=True`)
 - **Source:** Curated collection of Monet paintings
 - **Quality:** High-resolution digital reproductions
 
@@ -120,12 +120,12 @@ self.transform = transforms.Compose([
 ### 4.2 Design Rationale
 
 **Resolution Reduction to 64x64:**
-The decision to reduce image resolution to 64x64 pixels was driven by several factors identified during EDA:
+The decision to reduce image resolution from the original dimensions to 64x64 pixels was driven by several strategic factors:
 
-1. **Computational Efficiency:** The varied original dimensions (revealed in image properties analysis) would require significant computational resources at full resolution
-2. **Training Stability:** Lower resolution reduces the complexity of the learning task, leading to more stable GAN training
-3. **Pattern Focus:** At 64x64, the model focuses on essential artistic patterns rather than fine details, which aligns with impressionist aesthetics
-4. **Memory Constraints:** Enables efficient batch processing within available GPU memory
+1. **Computational Efficiency:** Training at full resolution (256x256 or higher) would require significantly more computational resources and training time
+2. **Training Stability:** Lower resolution reduces the complexity of the learning task, leading to more stable GAN training dynamics
+3. **Pattern Focus:** At 64x64, the model focuses on essential artistic patterns and color relationships rather than fine details, which aligns well with impressionist aesthetics
+4. **Memory Constraints:** Enables efficient batch processing within available GPU memory, particularly important for Apple Silicon MPS backend
 
 **Center Cropping:**
 Center cropping ensures that the most important compositional elements are preserved while maintaining aspect ratio consistency across the dataset.
@@ -428,13 +428,13 @@ The main.py script accepts the following key parameters:
 | `--epochs`                         | 100     | Number of training epochs           |
 | `--batch_size`                     | 16      | Training batch size                 |
 | `--latent_size`                    | 128     | Dimension of noise vector           |
-| `--generator_feature_map_size`     | 16      | Generator feature map base size     |
-| `--discriminator_feature_map_size` | 16      | Discriminator feature map base size |
+| `--generator_feature_map_size`     | 64      | Generator feature map base size     |
+| `--discriminator_feature_map_size` | 64      | Discriminator feature map base size |
 | `--generator_lr`                   | 0.0002  | Generator learning rate             |
 | `--discriminator_lr`               | 0.0002  | Discriminator learning rate         |
-| `--use_wandb`                      | 0       | Enable Weights & Biases logging     |
-| `--image_log_every_iters`          | 50      | Frequency of image logging          |
-| `--mifid_eval_every_epochs`        | 50      | Frequency of MiFID evaluation       |
+| `--use_wandb`                      | 1       | Enable Weights & Biases logging     |
+| `--image_log_every_iters`          | 10      | Frequency of image logging          |
+| `--mifid_eval_every_epochs`        | 0       | Frequency of MiFID evaluation       |
 
 ### 9.3 Running the Project
 
@@ -487,25 +487,30 @@ uv run python generate_submission_images.py \
 ### 9.5 Dependencies and Environment
 
 **Core Dependencies:**
-- PyTorch (with CUDA support recommended)
-- torchvision
-- Pillow (PIL)
-- NumPy
-- tqdm
-- Weights & Biases (optional)
+- PyTorch (>=2.0.0, with MPS/CUDA support)
+- torchvision (>=0.15.0)
+- torchmetrics (>=1.0.0) - for MiFID evaluation
+- Pillow (>=9.0.0)
+- NumPy (>=1.21.0)
+- matplotlib (>=3.5.0)
+- seaborn (>=0.13.2)
+- tqdm (>=4.67.1)
+- Weights & Biases (>=0.22.0)
+- python-dotenv (>=0.9.9)
 
 **Installation:**
 ```bash
 # Using uv (recommended)
 uv sync
 
-# Using pip
-pip install -r requirements.txt
+# Using pip with pyproject.toml
+pip install -e .
 ```
 
 **Hardware Requirements:**
-- GPU with at least 4GB VRAM (recommended)
+- GPU with at least 4GB VRAM (CUDA/MPS recommended)
+- Apple Silicon Mac (MPS) or NVIDIA GPU (CUDA) for optimal performance
 - 8GB+ system RAM
-- Sufficient storage for dataset and generated images
+- Sufficient storage for dataset and generated images (~2GB for dataset + artifacts)
 
 This comprehensive implementation provides a complete framework for artistic image generation using deep learning techniques, demonstrating both theoretical understanding and practical application of generative adversarial networks in the creative domain.
