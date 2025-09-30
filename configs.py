@@ -20,9 +20,7 @@ class AppParams:
     generator_lr: float = 0.0002
     discriminator_beta1: float = 0.5
     generator_beta1: float = 0.5
-    # One-sided label smoothing for real labels (1.0 disables)
     label_smoothing_real: float = 1.0
-    # Evaluation and logging knobs
-    mifid_eval_every_epochs: int = 1  # 0 disables
+    mifid_eval_every_epochs: int = 1
     mifid_eval_batches: int = 5
     image_log_every_iters: int = 10

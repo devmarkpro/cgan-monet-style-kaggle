@@ -8,17 +8,16 @@ class Dataset(TorchDataset):
     def __init__(
         self,
         img_dir: str,
-        batch_size: int = 16,  # Match notebook default
-        workers: int = 0,      # Match notebook default
+        batch_size: int = 16,
+        workers: int = 0,
     ):
         path_list = os.listdir(img_dir)
         abspath = os.path.abspath(img_dir)
 
-        # Filter only image files (match notebook behavior)
         image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.tif'}
         self.img_list = [
-            os.path.join(abspath, path) 
-            for path in path_list 
+            os.path.join(abspath, path)
+            for path in path_list
             if os.path.splitext(path.lower())[1] in image_extensions
         ]
 
@@ -28,17 +27,16 @@ class Dataset(TorchDataset):
             transforms.ToTensor(),
             transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
         ])
-        
-        # Create DataLoader once (like notebook)
+
         self.dataloader = DataLoader(
-            self, 
-            batch_size=batch_size, 
-            shuffle=True, 
+            self,
+            batch_size=batch_size,
+            shuffle=True,
             num_workers=workers,
             pin_memory=True if workers > 0 else False,
-            drop_last=True,  # Ensure consistent batch sizes
-            persistent_workers=True if workers > 0 else False,  # Keep workers alive between epochs
-            prefetch_factor=2 if workers > 0 else None,  # Reduce memory usage
+            drop_last=True,
+            persistent_workers=True if workers > 0 else False,
+            prefetch_factor=2 if workers > 0 else None,
         )
 
     def __len__(self):

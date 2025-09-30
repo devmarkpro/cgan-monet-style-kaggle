@@ -3,6 +3,7 @@ import logging
 import sys
 from pythonjsonlogger.json import JsonFormatter
 
+
 class Colors(enum.Enum):
     RED = "\033[1;31m"
     GREEN = "\033[1;32m"
@@ -13,12 +14,15 @@ class Colors(enum.Enum):
     PURPLE = "\033[1;35m"
     DEFAULT = "\033[0m"
 
+
 class ColorFormatter(logging.Formatter):
     """Colorize the final formatted string if record.color is present."""
+
     def format(self, record: logging.LogRecord) -> str:
         base = super().format(record)
         color = getattr(record, "color", "")
         return f"{color}{base}{Colors.DEFAULT.value}" if color else base
+
 
 class RemoveColorFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
@@ -26,10 +30,12 @@ class RemoveColorFilter(logging.Filter):
             delattr(record, "color")
         return True
 
+
 def log(msg: object, color: Colors = Colors.DEFAULT, level: int = logging.INFO):
     logger = logging.getLogger("CGAN Monet")
     extra = {"color": color.value if color != Colors.DEFAULT else ""}
     logger.log(level, msg, extra=extra, stacklevel=2)
+
 
 def setup(log_path: str = "./app.log"):
     logger = logging.getLogger("CGAN Monet")

@@ -35,8 +35,10 @@ def create_base_parser():
         default="./data/monet/training/monet_jpg",
         help="Path to the dataset directory, default: ./data/monet/training/monet_jpg",
     )
-    parser.add_argument("--workers", type=int, default=0, help="Number of workers, default: 0")
-    parser.add_argument("--batch_size", type=int, default=16, help="Batch size, default: 16")
+    parser.add_argument("--workers", type=int, default=0,
+                        help="Number of workers, default: 0")
+    parser.add_argument("--batch_size", type=int, default=16,
+                        help="Batch size, default: 16")
     parser.add_argument(
         "--artifacts_folder",
         type=str,
@@ -158,27 +160,31 @@ def add_eda_arguments(parser):
 def parse_arguments():
     """Parse command line arguments with subcommands"""
     # Main parser
-    main_parser = argparse.ArgumentParser(description="DCGAN Monet Style Transfer")
-    subparsers = main_parser.add_subparsers(dest='command', help='Available commands')
-    
+    main_parser = argparse.ArgumentParser(
+        description="DCGAN Monet Style Transfer")
+    subparsers = main_parser.add_subparsers(
+        dest='command', help='Available commands')
+
     # Create base parser for common arguments
     base_parser = create_base_parser()
-    
+
     # Add GAN subcommand
-    gan_parser = subparsers.add_parser('gan', parents=[base_parser], help='Train DCGAN model')
+    gan_parser = subparsers.add_parser(
+        'gan', parents=[base_parser], help='Train DCGAN model')
     add_gan_arguments(gan_parser)
-    
+
     # Add EDA subcommand
-    eda_parser = subparsers.add_parser('eda', parents=[base_parser], help='Perform exploratory data analysis')
+    eda_parser = subparsers.add_parser(
+        'eda', parents=[base_parser], help='Perform exploratory data analysis')
     add_eda_arguments(eda_parser)
-    
+
     args = main_parser.parse_args()
-    
+
     # If no command specified, show help
     if args.command is None:
         main_parser.print_help()
         sys.exit(1)
-    
+
     return args
 
 
@@ -186,7 +192,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     args = parse_arguments()
-    
+
     if args.command == 'gan':
         show_ascii_art: bool = True if args.ascii_art == 1 else False
 
@@ -224,7 +230,7 @@ if __name__ == "__main__":
             image_log_every_iters=args.image_log_every_iters,
         )
         main(params)
-        
+
     elif args.command == 'eda':
         log(msg="Starting EDA analysis", color=Colors.BLUE)
         # Create EDA params (only need common parameters)
@@ -244,4 +250,5 @@ if __name__ == "__main__":
     elapsed_time = end_time - start_time
 
     minutes, seconds = divmod(elapsed_time, 60)
-    log(msg=f"execution time: {int(minutes)}m {seconds:.2f}s", color=Colors.GREEN)
+    log(msg=f"execution time: {int(minutes)}m {seconds:.2f}s",
+        color=Colors.GREEN)

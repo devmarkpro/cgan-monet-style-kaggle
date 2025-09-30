@@ -11,8 +11,8 @@ SAMPLE_SIZE = 16
 CONV_DIM = 64
 
 lr = 0.0002
-beta1=0.5
-beta2=0.999
+beta1 = 0.5
+beta2 = 0.999
 
 
 class Generator(nn.Module):
@@ -36,8 +36,6 @@ class Generator(nn.Module):
         # Size of feature maps in generator
         ngf = self.generator_feature_map_size
 
-
-        # For 256x256 output: 1->4->8->16->32->64->128->256
         self._forward = nn.Sequential(
             nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False),
             nn.BatchNorm2d(ngf * 8),
@@ -58,7 +56,7 @@ class Generator(nn.Module):
             nn.ConvTranspose2d(ngf, 3, 4, 2, 1, bias=False),
             nn.Tanh()
         )
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # Match the working notebook: reshape input to (batch, latent, 1, 1)
         x = x.view(x.size(0), x.size(1), 1, 1)
         return self._forward(x)

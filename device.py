@@ -9,8 +9,10 @@ class DeviceInfo(NamedTuple):
     ngpu: int
     name: str
     backend: str  # "cuda" | "mps" | "cpu"
+
     def __str__(self):
         return f"DeviceInfo({self.device}, {self.ngpu}, {self.name})"
+
     def __repr__(self):
         return f"DeviceInfo({self.device}, {self.ngpu}, {self.name})"
 
@@ -34,11 +36,15 @@ def _detect_device() -> DeviceInfo:
                 raise RuntimeError("CUDA requested but not available")
             if backend == "mps" and not torch.backends.mps.is_available():
                 raise RuntimeError("MPS requested but not available")
-            ngpu = torch.cuda.device_count() if backend == "cuda" else (1 if backend == "mps" else 0)
+            ngpu = (
+                torch.cuda.device_count()
+                if backend == "cuda"
+                else (1 if backend == "mps" else 0)
+            )
             name = (
-                torch.cuda.get_device_name(dev.index or 0) if backend == "cuda"
-                else "Apple Silicon (MPS)" if backend == "mps"
-                else "CPU"
+                torch.cuda.get_device_name(dev.index or 0)
+                if backend == "cuda"
+                else "Apple Silicon (MPS)" if backend == "mps" else "CPU"
             )
             return DeviceInfo(dev, ngpu, name, backend)
         except Exception as e:
@@ -68,11 +74,14 @@ NGPU: int = DEVICE_INFO.ngpu
 DEVICE_NAME: str = DEVICE_INFO.name
 BACKEND: str = DEVICE_INFO.backend
 
+
 def is_cuda() -> bool:
     return BACKEND == "cuda"
 
+
 def is_mps() -> bool:
     return BACKEND == "mps"
+
 
 def is_cpu() -> bool:
     return BACKEND == "cpu"

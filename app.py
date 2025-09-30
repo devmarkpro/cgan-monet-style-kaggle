@@ -6,12 +6,7 @@ import time
 
 import torch
 import numpy as np
-from torch import nn, optim
-from torch.optim.lr_scheduler import LinearLR
-from torchmetrics.image.mifid import (
-    MemorizationInformedFrechetInceptionDistance as MiFID,
-)
-from wandb import util
+from torch import nn
 
 from configs import AppParams
 import utils
@@ -24,8 +19,8 @@ from generator import Generator
 from monet_wandb import MonetWandb
 
 
-import torchvision.utils as vutils
 import matplotlib.pyplot as plt
+
 
 class App(object):
     def __init__(self, params: AppParams):
@@ -61,20 +56,19 @@ class App(object):
         logger.log(self.generator, level=logging.DEBUG)
         logger.log(self.discriminator, level=logging.DEBUG)
 
-
         # Pass wandb logger to DCGAN if available
         wandb_logger = self.wandb if self.configs.use_wandb else None
-        
+
         dcgan = DCGAN(
             generator=self.generator,
             discriminator=self.discriminator,
             configs=self.configs,
             dataset=self.ds,
-            wandb_logger=wandb_logger
+            wandb_logger=wandb_logger,
         )
         samples, losses = dcgan.train()
         run_name = utils.get_run_name(wandb_logger)
-        
+
         logger.log(f"Saving samples")
         samples_path = f"./artifacts/samples_{run_name}.npy"
         losses_path = f"./artifacts/losses_{run_name}.npy"
@@ -82,30 +76,32 @@ class App(object):
         samples_cpu = [sample.cpu().detach() for sample in samples]
         np.save(samples_path, np.array(samples_cpu))
         np.save(losses_path, np.array(losses))
-        logger.log(f"Samples saved to {samples_path}", color=logger.Colors.GREEN)
+        logger.log(f"Samples saved to {samples_path}",
+                   color=logger.Colors.GREEN)
         logger.log(f"Losses saved to {losses_path}", color=logger.Colors.GREEN)
-        
+
         # Finish wandb run if it was used
         if wandb_logger:
             wandb_logger.finish()
-        fig, axes = plt.subplots(figsize=(15,10), nrows=2, ncols=4, sharey=True, sharex=True)
+        fig, axes = plt.subplots(
+            figsize=(15, 10), nrows=2, ncols=4, sharey=True, sharex=True
+        )
         for ax, img in zip(axes.flatten(), samples[-1]):
             _, w, h = img.size()
-            
+
             img = img.detach().cpu().numpy()
 
             img = np.transpose(img, (1, 2, 0))
-            
-            img = ((img +1)*255 / (2)).astype(np.uint8)
+
+            img = ((img + 1) * 255 / (2)).astype(np.uint8)
 
             ax.xaxis.set_visible(False)
             ax.yaxis.set_visible(False)
-            
-            im = ax.imshow(img.reshape((w,h,3)))
+
+            im = ax.imshow(img.reshape((w, h, 3)))
 
         plt.savefig(f"./artifacts/samples_{run_name}.png")
         plt.close()
-
 
     def _set_random_seed(self):
         random.seed(self.configs.seed)

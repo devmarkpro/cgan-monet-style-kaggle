@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from device import get_device_info
 
+
 class Discriminator(nn.Module):
     def __init__(self, num_channels: int, feature_map_size: int):
         super(Discriminator, self).__init__()
